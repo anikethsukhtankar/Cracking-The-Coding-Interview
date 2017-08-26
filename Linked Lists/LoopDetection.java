@@ -1,5 +1,7 @@
 package linkedlists;
 
+import java.util.HashSet;
+
 public class LoopDetection {
     public static Node loopDetect(Node head){
         Node slow = head;
@@ -23,6 +25,19 @@ public class LoopDetection {
         }
 
         return fast;
+    }
+
+    public static Node myLoopDetect(Node head){
+        HashSet<Node> buffer = new HashSet<Node>();
+        Node curr = head;
+        while(curr != null){
+            if(buffer.contains(curr))
+                return curr;
+            else
+                buffer.add(curr);
+            curr = curr.next;
+        }
+        return null;
     }
 
     public static void main(String args[]){
@@ -49,7 +64,7 @@ public class LoopDetection {
             n=n.next;
         }
         System.out.print("\n");
-        n = loopDetect(head);
+        n = myLoopDetect(head);
         System.out.println(n.data);
     }
 }
