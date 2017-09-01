@@ -1,6 +1,9 @@
 package treesandgraphs;
 
 public class ValidateBST {
+
+    static Integer last_printed = null;
+
     static class Node{
         private int value;
         private Node left;
@@ -12,13 +15,25 @@ public class ValidateBST {
         }
     }
 
+    public static boolean checkBST(Node n){
+        if(n==null) return true;
+
+        if(!checkBST(n.left)) return false;
+
+        if(last_printed!=null && n.value<=last_printed) return false;
+        last_printed = n.value;
+
+        if(!checkBST(n.right)) return false;
+        return true;
+    }
+
     public static boolean isBST(Node n){
         return isBST(n,Integer.MIN_VALUE,Integer.MAX_VALUE);
     }
 
     public static boolean isBST(Node n,int min, int max){
         if(n==null) return true;
-        if(n.value<min || n.value>=max) return false;
+        if(n.value<=min || n.value>max) return false;
         return isBST(n.left,min,n.value) && isBST(n.right,n.value,max);
     }
 
@@ -30,7 +45,8 @@ public class ValidateBST {
         n.left.right = new Node(3);
         n.right.left = new Node(5);
         n.right.right = new Node(7);
-        System.out.println(isBST(n));
+        //System.out.println(isBST(n));
+        System.out.println(checkBST(n));
 
         Node p = new Node(11);
         p.left = new Node(7);
@@ -39,6 +55,7 @@ public class ValidateBST {
         p.left.right = new Node(12);
         p.right.left = new Node(12);
         p.right.right = new Node(15);
-        System.out.println(isBST(p));
+        //System.out.println(isBST(p));
+        System.out.println(checkBST(n)); // won't work for duplicate values! I know I know
     }
 }
