@@ -12,6 +12,28 @@ public class Successor {
         }
     }
 
+    public static Node solSuccessor(Node n){
+        if(n == null) return null;
+        if(n.right!=null)
+            return leftMostChild(n.right);
+        else{
+            Node curr = n;
+            Node parent = n.parent;
+            while(parent != null && parent.left != curr){
+                curr = parent;
+                parent = parent.parent;
+            }
+            return parent;
+        }
+    }
+
+    private static Node leftMostChild(Node node) {
+        if(node == null) return null;
+        while(node.left!=null)
+            node = node.left;
+        return node;
+    }
+
     public static Node successor(Node n){
         if(n.right!=null){
             return minLeft(n.right);
@@ -37,7 +59,7 @@ public class Successor {
 
     public static void main(String[] args) {
         Node n = new Node(4);
-        Node t = n.left = new Node(2);
+        n.left = new Node(2);
         n.left.parent = n;
         n.right = new Node(6);
         n.right.parent = n;
@@ -47,9 +69,10 @@ public class Successor {
         n.left.right.parent = n.left;
         n.right.left = new Node(5);
         n.right.left.parent = n.right;
-        n.right.right = new Node(7);
+        Node t = n.right.right = new Node(7);
         n.right.right.parent = n.right;
-        System.out.println(successor(t)==null?null:successor(t).value);
+        //System.out.println(successor(t)==null?null:successor(t).value);
+        System.out.println(solSuccessor(t)==null?null:solSuccessor(t).value);
 
     }
 }
