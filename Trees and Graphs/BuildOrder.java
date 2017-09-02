@@ -19,11 +19,11 @@ public class BuildOrder {
     }
 
     public static void buildOrder(Character[] project, Dependency[] dependencies){
-        HashMap<Character,Boolean> visited = new HashMap<>();
+        HashMap<Character,Character> visited = new HashMap<>();
 
         for(Character c:project){
             adj.put(c,new LinkedList<>());
-            visited.put(c,false);
+            visited.put(c,'w');
         }
 
         for(Dependency d:dependencies){
@@ -32,27 +32,27 @@ public class BuildOrder {
 
         Stack<Character> res = new Stack<Character>();
         for(Character c : visited.keySet()){
-            if(!visited.get(c))
+            if(visited.get(c)!='b')
                 buildOrder(c,visited,res);
         }
 
         while(!res.isEmpty()){
-            System.out.print(res.pop());
+            System.out.print("->"+res.pop());
         }
     }
 
-    public static void buildOrder(Character c, HashMap<Character, Boolean> visited, Stack<Character> res){
-        visited.put(c,true);
+    public static void buildOrder(Character c, HashMap<Character, Character> visited, Stack<Character> res){
+        if(visited.get(c)=='g') throw new RuntimeException("Graph Has A Cycle");
         Character proj;
         Iterator<Character> li = adj.get(c).listIterator();
-
+        visited.put(c,'g');
         while(li.hasNext()){
             proj = li.next();
-            if(!visited.get(proj)){
+            if(visited.get(proj)!='b'){
                 buildOrder(proj,visited,res);
             }
         }
-
+        visited.put(c,'b');
         res.push(c);
     }
 
@@ -62,7 +62,8 @@ public class BuildOrder {
                             new Dependency('f','b'),
                             new Dependency('b','d'),
                             new Dependency('f','a'),
-                            new Dependency('d','c')};
+                            new Dependency('d','c')};/*,
+                            new Dependency('d','f')};*/
         buildOrder(proj,dep);
     }
 }
